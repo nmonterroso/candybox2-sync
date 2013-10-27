@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"name": "candybox2-sync",
+	"version": "1.0",
+	"description": "synchronizes your game from candybox2 so it can be played across browsers",
+	"background": {
+		"scripts": ["src/constants.js", "src/background.js"],
+		"persistent": false
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://candybox2.net/*", "*://*.candybox2.net/*"],
+			"js": ["src/constants.js", "src/utilities.js", "src/persistence.js", "src/candybox2-sync.js"]
+		}
+	],
+	"web_accessible_resources": ["src/inject/sync.js"],
+	"permissions": [
+		"storage",
+		"tabs",
+		"activeTab",
+		"*://candybox2.net/*",
+		"*://*.candybox2.net/*"
+	],
+	"page_action": {
+		"default_title": "Candybox2 Sync",
+		"default_icon": "images/logo.png"
+	}
+}
