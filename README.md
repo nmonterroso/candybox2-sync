@@ -4,7 +4,7 @@ Installation
 Need to add this to the google chrome extension store, but until then:
 	1. open up chrome://extensions
 	2. enable "developer mode" checkbox (top right corner)
-	3. click "load unpacked extension" and navigate to the root directory
+	3. drag and drop bin/candybox2-sync.crx into extensions window
 	
 Usage
 On a non save page (candybox2.net - no slot), you can just play and your progress will automatically be saved/loaded between browsers.
