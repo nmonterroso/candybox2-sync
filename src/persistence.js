@@ -44,15 +44,19 @@ var persistence = {
 
 		persistence.load(function(items) {
 			if (!items[constants.saveKeyCas] || items[constants.saveKeyCas] == persistence.cas) {
-				var saveData = persistence._generateSaveData();
-
-				persistence.external.set(saveData, function() {
-					if (chrome.runtime.lastError) {
-						callback(false, chrome.runtime.lastError);
-					} else {
-						persistence.cas = saveData[constants.saveKeyCas];
-						callback(true);
+				persistence._generateSaveData(function(saveData) {
+					if (saveData == null) {
+						callback(false);
 					}
+
+					persistence.external.set(saveData, function() {
+						if (chrome.runtime.lastError) {
+							callback(false, chrome.runtime.lastError);
+						} else {
+							persistence.cas = saveData[constants.saveKeyCas];
+							callback(true);
+						}
+					});
 				});
 			} else {
 				callback(false);
@@ -90,18 +94,30 @@ var persistence = {
 			clearInterval(persistence.timer);
 		}
 	},
-	_generateSaveData: function() {
+	_generateSaveData: function(callback) {
+		var cb = function(event) {
+			if (event.source != window) {
+				return;
+			}
+
+			if (event.data.type && event.data.type == constants.page2extension) {
+				window.removeEventListener("message", cb, false);
+
+				var rawSaveData = document.getElementById('_candybox2_sync_data').innerHTML,
+					data = {};
+
+				for (var i = 0, size = 0, offset = 0, length = rawSaveData.length; offset < length; offset += constants.saveDataMaxLength, ++i, ++size) {
+					data[constants.saveKeyData+i] = rawSaveData.slice(offset, constants.saveDataMaxLength + offset);
+				}
+
+				data[constants.saveKeyCas] = Math.floor((Math.random()*1000000)+1);
+				data[constants.saveKeyDataNumKeys] = size;
+
+				callback(data);
+			}
+		};
+
+		window.addEventListener("message", cb, false);
 		utilities.injectScriptRaw("_candybox2sync_setup();");
-		var rawSaveData = document.getElementById('_candybox2_sync_data').innerHTML,
-			data = {};
-
-		for (var i = 0, size = 0, offset = 0, length = rawSaveData.length; offset < length; offset += constants.saveDataMaxLength, ++i, ++size) {
-			data[constants.saveKeyData+i] = rawSaveData.slice(offset, constants.saveDataMaxLength + offset);
-		}
-
-		data[constants.saveKeyCas] = Math.floor((Math.random()*1000000)+1);
-		data[constants.saveKeyDataNumKeys] = size;
-
-		return data;
 	}
 };
