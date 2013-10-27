@@ -10,15 +10,18 @@ var utilities = {
 			return utilities.currentState;
 		},
 		calculateState: function() {
-			var search = window.location.search; // ?slot=X
-			var state = constants.pageAction_state.enabled;
+			var state = constants.pageActionState.enabled;
 
-			if (search.match(/^\?slot=([1-4])$/)) {
-				state = constants.pageAction_state.disabled;
+			if (utilities.isSlotPage()) {
+				state = constants.pageActionState.disabled;
 			}
 
 			return state;
 		}
+	},
+	isSlotPage: function() {
+		var search = window.location.search; // ?slot=X
+		return search.match(/^\?slot=([1-4])$/);
 	},
 	injectScriptFile: function(scriptPath) {
 		var script = document.createElement('script');
@@ -41,9 +44,6 @@ var utilities = {
 	},
 	log: function(type, message) {
 		console.log("candybox2-sync", type+":", message);
-	},
-	userSettings: {
-		localSlotSync: null
 	},
 	currentState: null
 };

@@ -74,9 +74,17 @@ var persistence = {
 			return;
 		}
 
-		utilities.injectScriptRaw('Main.reloadEverythingFromFile("'+state[constants.save.keys.data]+'");');
+		var script = '' +
+			'$.aop.before({target: Keyboard, method: "setGame"}, function(args) {' +
+				'candybox2SyncGame = args[0]' +
+			'});' +
+			'Main.reloadEverythingFromFile("'+state[constants.save.keys.data]+'");';
+
+		utilities.injectScriptRaw(script);
 	},
 	enable: function(callback) {
+		callback = callback || persistence.onTickComplete;
+
 		var _callback = function() {
 			persistence.save(function(success, errorMessage) {
 				if (!success) {
@@ -88,10 +96,18 @@ var persistence = {
 		};
 
 		persistence.timer = setInterval(_callback, constants.save.interval);
+		utilities.currentState = constants.pageActionState.enabled;
 	},
 	disable: function() {
 		if (persistence.timer > 0) {
 			clearInterval(persistence.timer);
+			utilities.currentState = constants.pageActionState.disabled;
+			persistence.timer = 0;
+		}
+	},
+	onTickComplete: function(saved) {
+		if (!saved) {
+			// TODO: how to notify the user?
 		}
 	},
 	_generateSaveData: function(callback) {
@@ -100,7 +116,7 @@ var persistence = {
 				return;
 			}
 
-			if (event.data.type && event.data.type == constants.comm_message.type) {
+			if (event.data.type && event.data.type == constants.commMessage.type) {
 				window.removeEventListener("message", cb, false);
 
 				var rawSaveData = document.getElementById('_candybox2_sync_data').innerHTML,

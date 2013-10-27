@@ -17,7 +17,4 @@ var _candybox2sync_setup = function() {
 
 $(document).ready(function() {
 	$('body').append("<div id='_candybox2_sync_data' style='display: none;'></div>");
-	$.aop.before({target: Keyboard, method: "setGame"}, function(arguments) {
-		candybox2SyncGame = arguments[0];
-	});
 });

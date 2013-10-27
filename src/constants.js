@@ -1,13 +1,15 @@
 var constants = {
 	message_actions: {
-		pageActionEnable: "pageActionEnable"
+		pageActionEnable: "pageActionEnable",
+		popupGetExtensionState: 'popupGetExtensionState',
+		togglePersistence: 'togglePersistence'
 	},
-	pageAction_state: {
+	pageActionState: {
 		disabled: 'disabled',
 		enabled: 'enabled',
 		error: 'error'
 	},
-	comm_message: {
+	commMessage: {
 		type: "page2SyncExtension",
 		saveReady: "sync_data_setup_complete"
 	},
@@ -18,6 +20,26 @@ var constants = {
 			data: "data",
 			cas: "cas",
 			numKeys: "numKeys"
+		}
+	},
+	icons: {
+		enabled: {
+			default: chrome.extension.getURL("images/icons/enabled.png"),
+			list: {
+
+			}
+		},
+		disabled: {
+			default: chrome.extension.getURL("images/icons/disabled.png"),
+			list: {
+
+			}
+		},
+		error: {
+			default: chrome.extension.getURL('images/icons/error.png'),
+			list: {
+
+			}
 		}
 	}
 };

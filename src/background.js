@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, callback) {
 	var response = null;
 
 	if (sender.tab) {
@@ -7,14 +7,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 				updatePageActionIcon(sender.tab.id, request.state);
 				chrome.pageAction.show(sender.tab.id);
 				break;
-			case constants.tabs_actions.inject:
-				injectPageJs(sender.tab.id);
-				break;
 		}
 	}
 
 	if (response !== null) {
-		sendResponse(response);
+		callback(response);
 	}
 });
 
@@ -22,14 +19,14 @@ var updatePageActionIcon = function(tabId, state) {
 	var icon;
 
 	switch (state) {
-		case constants.pageAction_state.disabled:
-			icon = 'images/icons/disabled.png';
+		case constants.pageActionState.disabled:
+			icon = constants.icons.disabled.default;
 			break;
-		case constants.pageAction_state.enabled:
-			icon = 'images/icons/enabled.png';
+		case constants.pageActionState.enabled:
+			icon = constants.icons.enabled.default;
 			break;
-		case constants.pageAction_state.error:
-			icon = 'images/icons/error.png';
+		case constants.pageActionState.error:
+			icon = constants.icons.error.default;
 	}
 
 	if (icon) {
