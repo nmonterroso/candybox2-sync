@@ -20,14 +20,14 @@ var utilities = {
 			return state;
 		}
 	},
-	injectSaveJs: function() {
+	injectScriptFile: function(scriptPath) {
 		var script = document.createElement('script');
-		script.src = chrome.extension.getURL('src/inject/sync.js');
+		script.src = chrome.extension.getURL(scriptPath);
 		document.head.appendChild(script);
 	},
-	injectLoadJs: function(loadedData) {
+	injectScriptRaw: function(js) {
 		var script = document.createElement('script');
-		var data = document.createTextNode('Main.reloadEverythingFromFile("'+loadedData+'");');
+		var data = document.createTextNode(js);
 
 		script.onload = function() {
 			this.parentNode.removeChild(this);

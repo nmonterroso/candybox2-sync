@@ -70,7 +70,7 @@ var persistence = {
 			return;
 		}
 
-		utilities.injectLoadJs(state[constants.saveKeyData]);
+		utilities.injectScriptRaw('Main.reloadEverythingFromFile("'+state[constants.saveKeyData]+'");');
 	},
 	enable: function(callback) {
 		var _callback = function() {

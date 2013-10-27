@@ -1,4 +1,5 @@
-utilities.injectSaveJs();
+utilities.injectScriptFile('src/inject/aop.js');
+utilities.injectScriptFile('src/inject/sync.js');
 
 var state = utilities.pageAction.set();
 

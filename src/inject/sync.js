@@ -24,7 +24,11 @@ var _candybox2sync_setup = function() {
 	e.html(saveData);
 };
 
+var candybox2SyncGame = null;
 $(document).ready(function() {
 	$('body').append("<div id='_candybox2_sync_data' style='display: none;'></div>");
+	$.aop.before({target: Keyboard, method: "setGame"}, function(game) {
+		candybox2SyncGame = game;
+	});
 	setInterval(_candybox2sync_setup, 15000);
 });

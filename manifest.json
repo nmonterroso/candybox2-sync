@@ -13,7 +13,7 @@
 			"js": ["src/constants.js", "src/utilities.js", "src/persistence.js", "src/candybox2-sync.js"]
 		}
 	],
-	"web_accessible_resources": ["src/inject/sync.js"],
+	"web_accessible_resources": ["src/inject/sync.js", "src/inject/aop.js"],
 	"permissions": [
 		"storage",
 		"tabs",
