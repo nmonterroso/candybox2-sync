@@ -91,6 +91,7 @@ var persistence = {
 		}
 	},
 	_generateSaveData: function() {
+		utilities.injectScriptRaw("_candybox2sync_setup();");
 		var rawSaveData = document.getElementById('_candybox2_sync_data').innerHTML,
 			data = {};
 

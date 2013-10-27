@@ -36,17 +36,6 @@ var utilities = {
 		script.appendChild(data);
 		document.body.appendChild(script);
 	},
-	injectImmediateSaveJs: function() {
-		var script = document.createElement('script');
-		var data = document.createTextNode('_candybox2sync_setup();');
-
-		script.onload = function() {
-			this.parentNode.removeChild(this);
-		};
-
-		script.appendChild(data);
-		document.body.appendChild(script);
-	},
 	error: function(message) {
 		utilities.log("ERROR", message);
 	},
