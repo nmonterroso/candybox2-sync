@@ -30,11 +30,7 @@ var persistence = {
 					return;
 				}
 
-				result[constants.save.keys.data] = "";
-				for (var i = 0; i < remainingKeys.length; ++i) {
-					result[constants.save.keys.data] += items[remainingKeys[i]];
-				}
-
+				result[constants.save.keys.data] = utilities.joinSaveKeys(items, remainingKeys.length);
 				callback(result);
 			})
 		});
@@ -58,7 +54,7 @@ var persistence = {
 							callback(true);
 						}
 					});
-				});
+				}, "_candybox2sync_setup");
 			} else {
 				callback(false);
 			}
@@ -117,7 +113,7 @@ var persistence = {
 			// TODO: how to notify the user?
 		}
 	},
-	_generateSaveData: function(callback) {
+	_generateSaveData: function(callback, fromExternalFunction) {
 		var cb = function(event) {
 			if (event.source != window) {
 				return;
@@ -142,6 +138,35 @@ var persistence = {
 		};
 
 		window.addEventListener("message", cb, false);
-		utilities.injectScriptRaw("_candybox2sync_setup();");
+
+		var rand = Math.floor((Math.random()*1000000)+1),
+			timerVar = "timer"+rand,
+			func = "tempFunction"+rand,
+			script = ''+
+				'if (typeof '+fromExternalFunction+' == "undefined") {' +
+					'var '+func+' = function() {' +
+						'if (typeof '+fromExternalFunction+' == "function") {' +
+							fromExternalFunction+'();' +
+							'clearInterval('+timerVar+');' +
+						'}' +
+					'};' +
+					'var '+timerVar+' = setInterval('+func+', 500);' +
+				'} else {' +
+					fromExternalFunction+'();' +
+				'}';
+
+		utilities.injectScriptRaw(script);
 	}
 };
+
+if (typeof _candybox2sync_forceData == "undefined") {
+	var tempFunction910978 = function() {
+		if (typeof _candybox2sync_forceData == "function") {
+			_candybox2sync_forceData()
+			clearInterval(timer910978);
+		}
+	};
+	var timer910978 = setInterval(tempFunction910978, 500);
+} else {
+	_candybox2sync_forceData();
+}

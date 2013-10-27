@@ -19,7 +19,7 @@
 			]
 		}
 	],
-	"web_accessible_resources": ["src/inject/sync.js", "src/inject/aop.js"],
+	"web_accessible_resources": ["src/inject/forceReload.js", "src/inject/sync.js", "src/inject/aop.js"],
 	"permissions": [
 		"storage",
 		"*://candybox2.net/*",

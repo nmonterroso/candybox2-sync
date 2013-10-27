@@ -19,6 +19,26 @@ var utilities = {
 			return state;
 		}
 	},
+	reloadCurrent: function() {
+		utilities.injectScriptFile('src/inject/forceReload.js');
+		persistence._generateSaveData(function(saveData) {
+			var state = {};
+			state[constants.save.keys.data] = utilities.joinSaveKeys(saveData, saveData[constants.save.keys.numKeys]);
+			state[constants.save.keys.cas] = saveData[constants.save.keys.cas];
+
+			persistence.setState(state);
+			persistence.cas = 0;
+		}, '_candybox2sync_forceData');
+	},
+	joinSaveKeys: function(items, length) {
+		var result = "";
+
+		for (var i = 0; i < length; ++i) {
+			result += items[constants.save.keys.data+i];
+		}
+
+		return result;
+	},
 	isSlotPage: function() {
 		var search = window.location.search; // ?slot=X
 		return search.match(/^\?slot=([1-4])$/);

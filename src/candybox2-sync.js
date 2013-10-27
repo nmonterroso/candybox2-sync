@@ -5,7 +5,13 @@ var state = utilities.pageAction.set();
 
 if (state == constants.pageActionState.enabled) {
 	persistence.load(function(data) {
-		persistence.setState(data);
-		persistence.enable(persistence.onTickComplete);
+		if (!state[constants.save.keys.data]) {
+			utilities.reloadCurrent();
+		} else {
+			persistence.setState(data);
+			persistence.enable(persistence.onTickComplete);
+		}
 	}, true);
+} else {
+	utilities.reloadCurrent();
 }
