@@ -21,6 +21,6 @@
 	],
 	"page_action": {
 		"default_title": "Candybox2 Sync",
-		"default_icon": "images/logo.png"
+		"default_popup": "html/pageAction_popup.html"
 	}
 }
