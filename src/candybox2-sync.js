@@ -5,7 +5,7 @@ var state = utilities.pageAction.set();
 
 if (state == constants.pageActionState.enabled) {
 	persistence.load(function(data) {
-		if (!state[constants.save.keys.data]) {
+		if (!data[constants.save.keys.data]) {
 			utilities.reloadCurrent();
 		} else {
 			persistence.setState(data);
