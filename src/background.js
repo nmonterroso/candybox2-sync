@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 	if (sender.tab) {
 		switch (request.action) {
-			case constants.message_actions.pageAction_enable:
+			case constants.message_actions.pageActionEnable:
 				chrome.pageAction.show(sender.tab.id);
 				updatePageActionIcon(request.state);
 				break;

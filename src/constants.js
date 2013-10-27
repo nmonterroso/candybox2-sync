@@ -1,16 +1,23 @@
 var constants = {
 	message_actions: {
-		"pageAction_enable": "pageAction_enable"
+		pageActionEnable: "pageActionEnable"
 	},
 	pageAction_state: {
-		'disabled': 'disabled',
-		'enabled': 'enabled'
+		disabled: 'disabled',
+		enabled: 'enabled'
 	},
-	page2extension: "page2SyncExtension",
-	page2extension_complete: "sync_data_setup_complete",
-	saveInterval: 300000, // 5 minute save interval
-	saveKeyData: "data",
-	saveKeyCas: "cas",
-	saveKeyDataNumKeys: "numKeys",
-	saveDataMaxLength: 3000
-}
+	comm_message: {
+		type: "page2SyncExtension",
+		saveReady: "sync_data_setup_complete"
+	},
+	save: {
+		interval: 300000, // 5 minutes
+		maxLength: 3000, // amount of data per entry (there's a limit)
+		keys: {
+			data: "data",
+			cas: "cas",
+			numKeys: "numKeys"
+		}
+	},
+	saveKeyDataNumKeys: "numKeys"
+};

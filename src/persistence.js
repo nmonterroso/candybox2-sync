@@ -3,17 +3,17 @@ var persistence = {
 	cas: 0, // compare and swap key, so multiple windows don't try to overwrite
 	timer: 0,
 	load: function(callback, loadData) {
-		persistence.external.get([constants.saveKeyDataNumKeys, constants.saveKeyCas], function(items) {
-			if (!items[constants.saveKeyCas]) {
+		persistence.external.get([constants.save.keys.numKeys, constants.save.keys.cas], function(items) {
+			if (!items[constants.save.keys.cas]) {
 				callback({});
 				return;
 			}
 
-			var numKeys = items[constants.saveKeyDataNumKeys] || 1,
+			var numKeys = items[constants.save.keys.numKeys] || 1,
 				remainingKeys = [],
 				result = {};
 
-			result[constants.saveKeyCas] = items[constants.saveKeyCas];
+			result[constants.save.keys.cas] = items[constants.save.keys.cas];
 
 			if (!loadData) {
 				callback(result);
@@ -21,18 +21,18 @@ var persistence = {
 			}
 
 			for (var i = 0; i < numKeys; ++i) {
-				remainingKeys.push(constants.saveKeyData+i);
+				remainingKeys.push(constants.save.keys.data+i);
 			}
 
 			persistence.external.get(remainingKeys, function(items) {
-				if (!items[constants.saveKeyData+"0"] || remainingKeys.length != Object.keys(items).length) {
+				if (!items[constants.save.keys.data+"0"] || remainingKeys.length != Object.keys(items).length) {
 					callback(result);
 					return;
 				}
 
-				result[constants.saveKeyData] = "";
+				result[constants.save.keys.data] = "";
 				for (var i = 0; i < remainingKeys.length; ++i) {
-					result[constants.saveKeyData] += items[remainingKeys[i]];
+					result[constants.save.keys.data] += items[remainingKeys[i]];
 				}
 
 				callback(result);
@@ -43,7 +43,7 @@ var persistence = {
 		callback = callback || function() {};
 
 		persistence.load(function(items) {
-			if (!items[constants.saveKeyCas] || items[constants.saveKeyCas] == persistence.cas) {
+			if (!items[constants.save.keys.cas] || items[constants.save.keys.cas] == persistence.cas) {
 				persistence._generateSaveData(function(saveData) {
 					if (saveData == null) {
 						callback(false);
@@ -53,7 +53,7 @@ var persistence = {
 						if (chrome.runtime.lastError) {
 							callback(false, chrome.runtime.lastError);
 						} else {
-							persistence.cas = saveData[constants.saveKeyCas];
+							persistence.cas = saveData[constants.save.keys.cas];
 							callback(true);
 						}
 					});
@@ -64,17 +64,17 @@ var persistence = {
 		}, false);
 	},
 	setState: function(state) {
-		if (!state[constants.saveKeyCas]) {
+		if (!state[constants.save.keys.cas]) {
 			return;
 		}
 
-		persistence.cas = state[constants.saveKeyCas];
+		persistence.cas = state[constants.save.keys.cas];
 
-		if (!state[constants.saveKeyData]) {
+		if (!state[constants.save.keys.data]) {
 			return;
 		}
 
-		utilities.injectScriptRaw('Main.reloadEverythingFromFile("'+state[constants.saveKeyData]+'");');
+		utilities.injectScriptRaw('Main.reloadEverythingFromFile("'+state[constants.save.keys.data]+'");');
 	},
 	enable: function(callback) {
 		var _callback = function() {
@@ -87,7 +87,7 @@ var persistence = {
 			});
 		};
 
-		persistence.timer = setInterval(_callback, constants.saveInterval);
+		persistence.timer = setInterval(_callback, constants.save.interval);
 	},
 	disable: function() {
 		if (persistence.timer > 0) {
@@ -100,18 +100,19 @@ var persistence = {
 				return;
 			}
 
-			if (event.data.type && event.data.type == constants.page2extension) {
+			if (event.data.type && event.data.type == constants.comm_message.type) {
 				window.removeEventListener("message", cb, false);
 
 				var rawSaveData = document.getElementById('_candybox2_sync_data').innerHTML,
+					maxLength = constants.save.maxLength;
 					data = {};
 
-				for (var i = 0, size = 0, offset = 0, length = rawSaveData.length; offset < length; offset += constants.saveDataMaxLength, ++i, ++size) {
-					data[constants.saveKeyData+i] = rawSaveData.slice(offset, constants.saveDataMaxLength + offset);
+				for (var i = 0, size = 0, offset = 0, length = rawSaveData.length; offset < length; offset += maxLength, ++i, ++size) {
+					data[constants.save.keys.data+i] = rawSaveData.slice(offset, maxLength + offset);
 				}
 
-				data[constants.saveKeyCas] = Math.floor((Math.random()*1000000)+1);
-				data[constants.saveKeyDataNumKeys] = size;
+				data[constants.save.keys.cas] = Math.floor((Math.random()*1000000)+1);
+				data[constants.save.keys.numKeys] = size;
 
 				callback(data);
 			}

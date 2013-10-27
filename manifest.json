@@ -16,8 +16,6 @@
 	"web_accessible_resources": ["src/inject/sync.js", "src/inject/aop.js"],
 	"permissions": [
 		"storage",
-		"tabs",
-		"activeTab",
 		"*://candybox2.net/*",
 		"*://*.candybox2.net/*"
 	],
