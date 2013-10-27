@@ -4,7 +4,8 @@ var constants = {
 	},
 	pageAction_state: {
 		disabled: 'disabled',
-		enabled: 'enabled'
+		enabled: 'enabled',
+		error: 'error'
 	},
 	comm_message: {
 		type: "page2SyncExtension",
@@ -18,6 +19,5 @@ var constants = {
 			cas: "cas",
 			numKeys: "numKeys"
 		}
-	},
-	saveKeyDataNumKeys: "numKeys"
+	}
 };
