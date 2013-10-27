@@ -3,7 +3,7 @@ var utilities = {
 		set: function(state) {
 			utilities.currentState = state || utilities.pageAction.calculateState();
 			chrome.runtime.sendMessage({
-				action: constants.message_actions.pageActionEnable,
+				action: constants.messageActions.pageActionEnable,
 				state: utilities.currentState
 			});
 

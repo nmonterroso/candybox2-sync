@@ -39,11 +39,12 @@ var persistence = {
 			})
 		});
 	},
-	save: function(callback) {
+	save: function(callback, force) {
 		callback = callback || function() {};
+		force = force || false;
 
 		persistence.load(function(items) {
-			if (!items[constants.save.keys.cas] || items[constants.save.keys.cas] == persistence.cas) {
+			if (force || !items[constants.save.keys.cas] || items[constants.save.keys.cas] == persistence.cas) {
 				persistence._generateSaveData(function(saveData) {
 					if (saveData == null) {
 						callback(false);
@@ -62,6 +63,12 @@ var persistence = {
 				callback(false);
 			}
 		}, false);
+	},
+	delete: function() {
+		persistence.cas = 0;
+		persistence.disable();
+		persistence.external.clear();
+		utilities.pageAction.set(constants.pageActionState.disabled);
 	},
 	setState: function(state) {
 		if (!state[constants.save.keys.cas]) {

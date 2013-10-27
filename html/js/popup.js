@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 		chrome.tabs.sendMessage(
 			tab.id,
-			{ action: constants.message_actions.popupGetExtensionState },
+			{ action: constants.messageActions.popupGetExtensionState },
 			function(response) {
 				var img = $('#option-toggle img'),
 					description = $('#option-toggle .option-text');
@@ -29,7 +29,17 @@ $(document).ready(function() {
 	});
 
 	$('#option-toggle').click(function() {
-		chrome.tabs.sendMessage(currentTab.id, { action: constants.message_actions.togglePersistence });
+		chrome.tabs.sendMessage(currentTab.id, { action: constants.messageActions.togglePersistence });
+		window.close();
+	});
+
+	$('#option-force-sync').click(function() {
+		chrome.tabs.sendMessage(currentTab.id, { action: constants.messageActions.forceSave });
+		window.close();
+	});
+
+	$('#option-delete').click(function() {
+		chrome.tabs.sendMessage(currentTab.id, { action: constants.messageActions.delete });
 		window.close();
 	});
 });

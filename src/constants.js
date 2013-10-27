@@ -1,8 +1,10 @@
 var constants = {
-	message_actions: {
+	messageActions: {
 		pageActionEnable: "pageActionEnable",
 		popupGetExtensionState: 'popupGetExtensionState',
-		togglePersistence: 'togglePersistence'
+		togglePersistence: 'togglePersistence',
+		forceSave: 'forceSave',
+		delete: 'deleteData'
 	},
 	pageActionState: {
 		disabled: 'disabled',
